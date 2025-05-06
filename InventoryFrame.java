@@ -96,7 +96,14 @@ public class InventoryFrame extends JFrame {
 
                 manager.addVehicle(v);
                 manager.saveToFile();
-                model.addRow(new Object[]{v.getId(), v.getMake(), v.getModel(), v.getYear(), v.getPrice(), v.getType()});
+                model.addRow(new Object[]{
+                    v.getId(),
+                    v.getMake(),
+                    v.getModel(),
+                    v.getYear(),
+                    String.format("%,.2f", v.getPrice()),
+                    v.getType()
+                });
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Invalid input!", "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -107,7 +114,15 @@ public class InventoryFrame extends JFrame {
             if (id != null) {
                 for (Vehicle v : manager.listVehicles()) {
                     if (v.getId().equals(id)) {
-                        JOptionPane.showMessageDialog(this, v.toString());
+                        // JOptionPane.showMessageDialog(this, v.toString());
+                        StringBuilder sb = new StringBuilder();
+                        sb.append("ID: ").append(v.getId()).append("\n")
+                          .append("Make: ").append(v.getMake()).append("\n")
+                          .append("Model: ").append(v.getModel()).append("\n")
+                          .append("Year: ").append(v.getYear()).append("\n")
+                          .append("Price: ").append(String.format("%.2f", v.getPrice())).append("\n")
+                          .append("Type: ").append(v.getType());
+                        JOptionPane.showMessageDialog(this, sb.toString(), "Vehicle Details", JOptionPane.INFORMATION_MESSAGE);
                         return;
                     }
                 }
@@ -191,19 +206,23 @@ public class InventoryFrame extends JFrame {
 
     private void loadTable() {
         for (Vehicle v : manager.listVehicles()) {
-            model.addRow(new Object[]{v.getId(), v.getMake(), v.getModel(), v.getYear(), v.getPrice(), v.getType()});
+            model.addRow(new Object[]{
+                v.getId(),
+                v.getMake(),
+                v.getModel(),
+                v.getYear(),
+                String.format("%,.2f", v.getPrice()),
+                v.getType()
+            });
         }
     }
 
-    /**
-     * Clears and repopulates the inventory table with the given list.
-     */
     private void populateTable(List<Vehicle> list) {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         model.setRowCount(0);
         for (Vehicle v : list) {
             model.addRow(new Object[]{
-                v.getId(), v.getMake(), v.getModel(), v.getYear(), v.getPrice(), v.getType()
+                v.getId(), v.getMake(), v.getModel(), v.getYear(), String.format("%,.2f", v.getPrice()), v.getType()
             });
         }
     }

@@ -39,7 +39,7 @@ public class UserManager {
     }
 
     public boolean register(String username, String password) throws IOException {
-        // Enforce username/password rules
+        // strict username and password rules for low safety
         if (!isValidUsername(username)) {
             throw new IllegalArgumentException("Username must be at least 3 characters long.");
         }

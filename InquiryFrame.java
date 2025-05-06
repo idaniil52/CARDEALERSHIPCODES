@@ -66,7 +66,7 @@ public class InquiryFrame extends JFrame {
         toolbar.add(removeInquiryButton);
         add(toolbar, BorderLayout.NORTH);
 
-        // Pack form and split pane into center panel
+        // pane split
         JPanel center = new JPanel(new BorderLayout(5,5));
         center.add(form, BorderLayout.NORTH);
         center.add(splitPane, BorderLayout.CENTER);
