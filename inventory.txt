@@ -1,4 +1,2 @@
-123,Toyota,Camry,2023,200000.0,Sedan
-toyota,civic,2022,2021,1.0E7,Sedan
 toyota,civic,2022,2021,1.0E8,Sedan
 toyota,civic,2022,2021,1.0E7,Sedan

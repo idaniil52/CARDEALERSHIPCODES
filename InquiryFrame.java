@@ -33,7 +33,7 @@ public class InquiryFrame extends JFrame {
         inquiryTable = new JTable(inquiryModel);
         loadInquiries();
 
-        String[] vehicleCols = {"ID", "Make", "Model", "Year", "Price", "Type"};
+        String[] vehicleCols = {"ID", "Make", "Model", "Year", "Type"};
         vehicleModel = new DefaultTableModel(vehicleCols, 0);
         vehicleTable = new JTable(vehicleModel);
         loadVehicles();
@@ -163,7 +163,7 @@ public class InquiryFrame extends JFrame {
 
     private void loadVehicles() {
         for (Vehicle v : inventoryManager.listVehicles()) {
-            vehicleModel.addRow(new Object[]{v.getId(), v.getMake(), v.getModel(), v.getYear(), v.getPrice(), v.getType()});
+            vehicleModel.addRow(new Object[]{v.getId(), v.getMake(), v.getModel(), v.getYear(), v.getType()});
         }
     }
 }
