@@ -4,19 +4,25 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import java.io.IOException;
+import javax.swing.BorderFactory;
+import javax.swing.JComponent;
+import java.awt.Font;
 
 public class LoginFrame extends JFrame {
     public LoginFrame() {
-        super("Please log in");
+        super("Doxey's Car Dealership");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLayout(new BorderLayout(10,10));
+        setLayout(new BorderLayout(5,5));
+        ((JComponent)getContentPane()).setBorder(
+            BorderFactory.createEmptyBorder(15, 15, 15, 15)
+        );
 
         // 1) Photo at top
         JLabel photo = new JLabel(new ImageIcon("logo.jpg"));
         photo.setHorizontalAlignment(SwingConstants.CENTER);
         add(photo, BorderLayout.NORTH);
 
-        // 2) Form in center
+        // 2) Employee login label and form
         JPanel form = new JPanel(new GridLayout(2,2,5,5));
         JTextField userField = new JTextField();
         JPasswordField passField = new JPasswordField();
@@ -24,7 +30,13 @@ public class LoginFrame extends JFrame {
         form.add(userField);
         form.add(new JLabel("Password:"));
         form.add(passField);
-        add(form, BorderLayout.CENTER);
+
+        JPanel centerPanel = new JPanel(new BorderLayout(5,5));
+        JLabel employeeLabel = new JLabel("Employee Login", SwingConstants.CENTER);
+        employeeLabel.setFont(employeeLabel.getFont().deriveFont(Font.BOLD, 14f));
+        centerPanel.add(employeeLabel, BorderLayout.NORTH);
+        centerPanel.add(form, BorderLayout.CENTER);
+        add(centerPanel, BorderLayout.CENTER);
 
         // 3) Buttons at bottom
         JPanel buttons = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
@@ -36,6 +48,7 @@ public class LoginFrame extends JFrame {
 
         pack();
         setLocationRelativeTo(null);
+        setResizable(false);
 
         // 4) Wire it up
         UserManager um;
@@ -51,7 +64,7 @@ public class LoginFrame extends JFrame {
                     new MainFrame().setVisible(true);
                     dispose();
                 } else {
-                    JOptionPane.showMessageDialog(this, "Invalid credentials");
+                    JOptionPane.showMessageDialog(this, "Invalid Match of Credentials");
                 }
             } catch (IOException ex) {
                 ex.printStackTrace();
