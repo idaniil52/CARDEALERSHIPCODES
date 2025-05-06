@@ -2,9 +2,14 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.ArrayList;
+import javax.swing.JButton;
+import javax.swing.JToolBar;
+import javax.swing.table.DefaultTableModel;
+import java.util.List;
 
 public class InventoryFrame extends JFrame {
     private final InventoryManager manager = new InventoryManager();
+    private final JTable table;
     private final DefaultTableModel model;
     private JPanel panel1;
     private JTextField idField;
@@ -13,19 +18,47 @@ public class InventoryFrame extends JFrame {
     private JTextField yearField;
     private JTextField priceField;
     private JComboBox comboBox1;
+    private JButton viewSoldButton;
+    private JButton viewRemovedButton;
+    private JButton viewInventoryButton;
 
     public InventoryFrame() {
         super("Inventory Management");
         this.setResizable(true);
-        this.setBounds(600, 200, 342, 300);
+        this.setSize(800, 600);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout(5, 5));
 
+        JButton addButton = new JButton("Add Vehicle");
+        JButton searchButton = new JButton("Search by ID");
+        JButton buyButton = new JButton("Buy Vehicle");
+        JButton removeButton = new JButton("Remove Vehicle");
+        JButton backButton = new JButton("Back to Home");
+        JButton sellButton = new JButton("Sell Vehicle");
+
+        // Top toolbar with action buttons
+        JToolBar toolbar = new JToolBar();
+        toolbar.setFloatable(false);
+        toolbar.add(backButton);
+        toolbar.addSeparator();
+        toolbar.add(addButton);
+        toolbar.add(searchButton);
+        toolbar.add(buyButton);
+        toolbar.add(removeButton);
+        toolbar.add(sellButton);
+        viewInventoryButton = new JButton("View Inventory");
+        toolbar.add(viewInventoryButton);
+        toolbar.addSeparator();
+        viewSoldButton = new JButton("View Sold Cars");
+        viewRemovedButton = new JButton("View Removed Cars");
+        toolbar.add(viewSoldButton);
+        toolbar.add(viewRemovedButton);
+        add(toolbar, BorderLayout.NORTH);
+
         String[] columns = {"ID", "Make", "Model", "Year", "Price", "Type"};
         model = new DefaultTableModel(columns, 0);
-        JTable table = new JTable(model);
+        table = new JTable(model);
         loadTable();
-        add(new JScrollPane(table), BorderLayout.CENTER);
 
         JTextField idF = new JTextField(), makeF = new JTextField(), modelF = new JTextField(),
                 yearF = new JTextField(), priceF = new JTextField();
@@ -38,23 +71,12 @@ public class InventoryFrame extends JFrame {
         form.add(new JLabel("Year:")); form.add(yearF);
         form.add(new JLabel("Price:")); form.add(priceF);
         form.add(new JLabel("Type:")); form.add(typeCB);
-        add(form, BorderLayout.NORTH);
 
-        JButton addButton = new JButton("Add Vehicle");
-        JButton searchButton = new JButton("Search by ID");
-        JButton buyButton = new JButton("Buy Vehicle");
-        JButton removeButton = new JButton("Remove Vehicle");
-        JButton backButton = new JButton("Back to Home");
-        JButton sellButton = new JButton("Sell Vehicle");
-
-        JPanel buttonPanel = new JPanel(new GridLayout(2, 3, 5, 5));
-        buttonPanel.add(addButton);
-        buttonPanel.add(searchButton);
-        buttonPanel.add(buyButton);
-        buttonPanel.add(removeButton);
-        buttonPanel.add(backButton);
-        buttonPanel.add(sellButton);
-        add(buttonPanel, BorderLayout.SOUTH);
+        // Pack form and table into center
+        JPanel center = new JPanel(new BorderLayout(5,5));
+        center.add(form, BorderLayout.NORTH);
+        center.add(new JScrollPane(table), BorderLayout.CENTER);
+        add(center, BorderLayout.CENTER);
 
         addButton.addActionListener(e -> {
             try {
@@ -120,11 +142,11 @@ public class InventoryFrame extends JFrame {
                 }
             }
             if (toRemove != null) {
-                ((ArrayList<Vehicle>) manager.listVehicles()).remove(toRemove);
-                manager.saveToFile();
-                model.setRowCount(0);
-                loadTable();
+                // use buyVehicle to record removals
+                manager.buyVehicle(toRemove);
                 JOptionPane.showMessageDialog(this, "Vehicle removed.");
+                // refresh table to current inventory
+                populateTable(manager.listVehicles());
             } else {
                 JOptionPane.showMessageDialog(this, "Vehicle not found.");
             }
@@ -153,11 +175,36 @@ public class InventoryFrame extends JFrame {
                 JOptionPane.showMessageDialog(this, "Vehicle not found.");
             }
         });
+
+        viewSoldButton.addActionListener(e -> {
+            populateTable(manager.listSoldVehicles());
+        });
+
+        viewRemovedButton.addActionListener(e -> {
+            populateTable(manager.listRemovedVehicles());
+        });
+
+        viewInventoryButton.addActionListener(e -> {
+            populateTable(manager.listVehicles());
+        });
     }
 
     private void loadTable() {
         for (Vehicle v : manager.listVehicles()) {
             model.addRow(new Object[]{v.getId(), v.getMake(), v.getModel(), v.getYear(), v.getPrice(), v.getType()});
+        }
+    }
+
+    /**
+     * Clears and repopulates the inventory table with the given list.
+     */
+    private void populateTable(List<Vehicle> list) {
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+        model.setRowCount(0);
+        for (Vehicle v : list) {
+            model.addRow(new Object[]{
+                v.getId(), v.getMake(), v.getModel(), v.getYear(), v.getPrice(), v.getType()
+            });
         }
     }
 }

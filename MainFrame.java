@@ -7,7 +7,7 @@ public class MainFrame extends JFrame {
     private JButton customerServiceButton;
 
     public MainFrame() {
-        super("Car Dealership");
+        super("Welcome To Doxey's Car dealership");
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setBounds(600, 200, 342, 300);
         setLocationRelativeTo(null);

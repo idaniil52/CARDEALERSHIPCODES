@@ -1,0 +1,2 @@
+2,Chevy,Corvette,2023,620000.0,Coupe
+3,Chevy,Corvette,2023,620000.0,Coupe

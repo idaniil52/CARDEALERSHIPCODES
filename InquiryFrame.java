@@ -1,5 +1,6 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.JToolBar;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -40,7 +41,6 @@ public class InquiryFrame extends JFrame {
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
                 new JScrollPane(inquiryTable), new JScrollPane(vehicleTable));
         splitPane.setResizeWeight(0.5);
-        add(splitPane, BorderLayout.CENTER);
 
         JTextField nameF = new JTextField();
         JTextField contactF = new JTextField();
@@ -50,19 +50,27 @@ public class InquiryFrame extends JFrame {
         form.add(new JLabel("Name:")); form.add(nameF);
         form.add(new JLabel("Contact:")); form.add(contactF);
         form.add(new JLabel("Message:")); form.add(new JScrollPane(messageA));
-        add(form, BorderLayout.NORTH);
 
-        JButton addButton = new JButton("Add Inquiry");
-        JButton serviceButton = new JButton("Service Vehicle");
-        JButton backButton = new JButton("Back to Home");
-        JButton removeInquiryButton = new JButton("Remove Inquiry");
+        addButton = new JButton("Add Inquiry");
+        serviceButton = new JButton("Service Vehicle");
+        removeInquiryButton = new JButton("Remove Inquiry");
+        backButton = new JButton("Back to Home");
 
-        JPanel buttonPanel = new JPanel(new GridLayout(1, 4, 10, 10));
-        buttonPanel.add(addButton);
-        buttonPanel.add(serviceButton);
-        buttonPanel.add(removeInquiryButton); // add this line
-        buttonPanel.add(backButton);
-        add(buttonPanel, BorderLayout.SOUTH);
+        // Top toolbar
+        JToolBar toolbar = new JToolBar();
+        toolbar.setFloatable(false);
+        toolbar.add(backButton);
+        toolbar.addSeparator();
+        toolbar.add(addButton);
+        toolbar.add(serviceButton);
+        toolbar.add(removeInquiryButton);
+        add(toolbar, BorderLayout.NORTH);
+
+        // Pack form and split pane into center panel
+        JPanel center = new JPanel(new BorderLayout(5,5));
+        center.add(form, BorderLayout.NORTH);
+        center.add(splitPane, BorderLayout.CENTER);
+        add(center, BorderLayout.CENTER);
 
         addButton.addActionListener(e -> {
             if (nameF.getText().isEmpty() || contactF.getText().isEmpty() || messageA.getText().isEmpty()) {
