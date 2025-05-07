@@ -1,3 +1,4 @@
 2,Chevy,Corvette,2023,620000.0,Coupe
 3,Chevy,Corvette,2023,620000.0,Coupe
 toyota,civic,2022,2021,1.0E7,Sedan
+toyota,civic,2022,2021,1.0E7,Sedan
